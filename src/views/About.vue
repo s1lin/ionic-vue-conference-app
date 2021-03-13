@@ -53,14 +53,14 @@
   import { Component, Prop, Vue } from 'vue-property-decorator';
   import { mapGetters } from 'vuex';
 
-  @Component({
-    computed: mapGetters(['conferenceStart'])
-  })
+  // @Component({
+  //   computed: mapGetters(['conferenceStart'])
+  // })
   export default class About extends Vue {
 
-    presentPopover(event){
-      console.log('click', event)
-    }
+    // presentPopover(event){
+    //   console.log('click', event)
+    // }
   }
 </script>
 

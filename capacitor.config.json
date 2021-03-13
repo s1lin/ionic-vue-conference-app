@@ -1,6 +1,6 @@
 {
-  "appId": "io.ionic.starter",
-  "appName": "heelo",
+  "appId": "com.trustcare.io",
+  "appName": "trustcare",
   "bundledWebRuntime": false,
   "webDir": "dist"
 }
