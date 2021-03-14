@@ -9,10 +9,6 @@
       <ion-vue-router name="speaker"></ion-vue-router>
     </ion-tab>
 
-    <ion-tab tab="map">
-      <ion-vue-router name="map"></ion-vue-router>
-    </ion-tab>
-
     <ion-tab tab="about">
       <ion-vue-router name="about"></ion-vue-router>
     </ion-tab>

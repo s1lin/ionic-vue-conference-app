@@ -1,32 +1,35 @@
 <template>
   <div class="ion-page">
+
     <ion-header>
-      <ion-toolbar color="primary">
-        <ion-buttons slot="start">
-          <ion-menu-button></ion-menu-button>
-        </ion-buttons>
+      <ion-card color="light">
+        <div class="img-wrapper">
+          <img :src="user.profilePic" :alt="user.name">
+        </div>
+        <ion-card-content class="ion-text-center">
+          <h2>{{ user.name }}</h2>
+          <ion-text color="medium">
+            <div style="display: flex;" class="ion-justify-content-center">
+              <ion-icon style="margin-top:0.65%"  name="pin" color="medium">
+              </ion-icon>
+              <p>{{ user.location }}</p>
+            </div>
+          </ion-text>
+        </ion-card-content>
+      </ion-card>
+    </ion-header>
 
-        <ion-segment @ionChange="updateSegment">
-          <ion-segment-button value="all" checked="segment === 'all'">All</ion-segment-button>
-          <ion-segment-button value="favorites" checked="segment === 'favorites'">Favorites</ion-segment-button>
-        </ion-segment>
+    <ion-content>
 
-        <ion-buttons slot="end">
-          <ion-button @click="presentFilter">
-            <ion-icon slot="icon-only" name="options"></ion-icon>
-          </ion-button>
-        </ion-buttons>
-      </ion-toolbar>
+
 
       <ion-toolbar color="primary">
         <ion-searchbar v-model="queryText" @ionChange="updateSearchTerm" placeholder="Search"></ion-searchbar>
       </ion-toolbar>
-    </ion-header>
-    <ion-content>
       <ion-list v-show="allGrouped.length > 0">
         <ion-item-group v-for="group in allGrouped" :key="group.id">
           <ion-item-divider sticky>
-            <ion-label>{{group.startTime | dateFormat("h:mm a")}}</ion-label>
+            <ion-label>{{ group.startTime | dateFormat("h:mm a") }}</ion-label>
           </ion-item-divider>
 
           <ion-item-sliding
@@ -36,8 +39,9 @@
           >
             <ion-item button @click="goToSessionDetail(session)">
               <ion-label>
-                <h3>{{session.name}}</h3>
-                <p>{{session.dateTimeStart | dateFormat("h:mm a")}} &mdash; {{session.dateTimeEnd | dateFormat("h:mm a")}}: {{session.location}}</p>
+                <h3>{{ session.name }}</h3>
+                <p>{{ session.dateTimeStart | dateFormat("h:mm a") }} &mdash;
+                  {{ session.dateTimeEnd | dateFormat("h:mm a") }}: {{ session.location }}</p>
               </ion-label>
             </ion-item>
             <ion-item-options>
@@ -45,12 +49,14 @@
                 color="favorite"
                 @click="addFavorite($event, session)"
                 v-if="segment === 'all'"
-              >Favorite</ion-item-option>
+              >Favorite
+              </ion-item-option>
               <ion-item-option
                 color="danger"
                 @click="removeFavorite($event, session, 'Remove Favorite')"
                 v-if="segment === 'favorites'"
-              >Remove</ion-item-option>
+              >Remove
+              </ion-item-option>
             </ion-item-options>
           </ion-item-sliding>
         </ion-item-group>
@@ -86,38 +92,47 @@ ion-item-sliding[track="ionic"] ion-label {
   border-left: 2px solid var(--ion-color-primary);
   padding-left: 10px;
 }
+
 ion-item-sliding[track="angular"] ion-label {
   border-left: 2px solid var(--ion-color-angular);
   padding-left: 10px;
 }
+
 ion-item-sliding[track="communication"] ion-label {
   border-left: 2px solid var(--ion-color-communication);
   padding-left: 10px;
 }
+
 ion-item-sliding[track="tooling"] ion-label {
   border-left: 2px solid var(--ion-color-tooling);
   padding-left: 10px;
 }
+
 ion-item-sliding[track="services"] ion-label {
   border-left: 2px solid var(--ion-color-services);
   padding-left: 10px;
 }
+
 ion-item-sliding[track="design"] ion-label {
   border-left: 2px solid var(--ion-color-design);
   padding-left: 10px;
 }
+
 ion-item-sliding[track="workshop"] ion-label {
   border-left: 2px solid var(--ion-color-workshop);
   padding-left: 10px;
 }
+
 ion-item-sliding[track="food"] ion-label {
   border-left: 2px solid var(--ion-color-food);
   padding-left: 10px;
 }
+
 ion-item-sliding[track="documentation"] ion-label {
   border-left: 2px solid var(--ion-color-documentation);
   padding-left: 10px;
 }
+
 ion-item-sliding[track="navigation"] ion-label {
   border-left: 2px solid var(--ion-color-navigation);
   padding-left: 10px;
@@ -125,9 +140,9 @@ ion-item-sliding[track="navigation"] ion-label {
 </style>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
-import { Session, SessionGroup } from "../store/modules/sessions";
-import { parse as parseDate } from "date-fns";
+import {Component, Prop, Vue} from "vue-property-decorator";
+import {Session, SessionGroup} from "../store/modules/sessions";
+import {parse as parseDate} from "date-fns";
 import SessionListFilter from "./SessionListFilter.vue";
 
 @Component
@@ -136,6 +151,7 @@ export default class SessionList extends Vue {
     fab: HTMLIonFabElement;
   };
   segment = "all";
+
   groupedByStartTime(sessions: Session[]) {
     return sessions
       .sort(
@@ -249,9 +265,10 @@ export default class SessionList extends Vue {
   goToSessionDetail(session: Session) {
     this.$router.push({
       name: "session-detail",
-      params: { sessionId: session.id.toString() }
+      params: {sessionId: session.id.toString()}
     });
   }
+
   async presentFilter() {
     const modal = await this.$ionic.modalController.create({
       component: SessionListFilter,
@@ -262,17 +279,20 @@ export default class SessionList extends Vue {
     });
     await modal.present();
 
-    const { data } = await modal.onWillDismiss();
+    const {data} = await modal.onWillDismiss();
     if (data) {
       this.$store.dispatch("updateTrackFilters", data);
     }
   }
+
   updateSegment(e: CustomEvent) {
     this.segment = e.detail.value;
   }
+
   updateSearchTerm(e: CustomEvent) {
     this.$store.dispatch("setSearchText", e.detail.value);
   }
+
   async openSocial(network: string) {
     const loading = await this.$ionic.loadingController.create({
       message: `Posting to ${network}`,
@@ -282,5 +302,32 @@ export default class SessionList extends Vue {
     await loading.onWillDismiss();
     this.$refs.fab.close();
   }
+
+  get user() {
+    return this.$store.state.speakers.speakers.concat().sort()[0];
+  }
 }
 </script>
+<style>
+ion-card {
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.2);
+  overflow: visible;
+  margin: 16px 0 24px;
+  position: relative;
+  padding-top: 1px;
+  padding-bottom: 10px;
+}
+
+ion-card .img-wrapper {
+  position: absolute;
+  left: 10%;
+  transform: translateX(-50%);
+}
+
+ion-card .img-wrapper img {
+  border-radius: 10px;
+  width: 80px;
+  height: 80px;
+}
+
+</style>

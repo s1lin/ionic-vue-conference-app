@@ -1,10 +1,10 @@
 [{
   "id": 1,
-  "name": "Burt Bear",
-  "profilePic": "/assets/img/speakers/bear.jpg",
+  "name": "Manoosh Samiei",
+  "profilePic": "/assets/img/speakers/Manoosh.png",
   "twitter": "ionicframework",
   "about": "Burt is a Bear.",
-  "location": "Everywhere",
+  "location": "Cedar Falls Residence, Montreal",
   "email": "burt@example.com",
   "phone": "+1-541-754-3010"
 }, {
