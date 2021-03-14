@@ -2,25 +2,50 @@
   <div class="ion-page">
 
     <ion-header>
-      <ion-card color="light">
-        <div class="img-wrapper">
-          <img :src="user.profilePic" :alt="user.name">
-        </div>
-        <ion-card-content class="ion-text-center">
-          <h2>{{ user.name }}</h2>
-          <ion-text color="medium">
-            <div style="display: flex;" class="ion-justify-content-center">
-              <ion-icon style="margin-top:0.65%"  name="pin" color="medium">
-              </ion-icon>
-              <p>{{ user.location }}</p>
+      <ion-card color="light" style="border-radius: 10px; margin: 10px">
+        <ion-row>
+          <ion-col size="3">
+            <div class="img-wrapper">
+              <img :src="user.profilePic" :alt="user.name">
             </div>
-          </ion-text>
-        </ion-card-content>
+          </ion-col>
+          <ion-col size="9">
+            <h1 style="margin-top: 10px; margin-bottom: 5px">{{ user.name }}</h1>
+            <ion-icon style="margin-top:0.65%" name="pin" color="medium">
+            </ion-icon>
+            <ion-text color="medium" style="font-size: 16px">
+              {{ user.location }}
+            </ion-text>
+          </ion-col>
+        </ion-row>
       </ion-card>
     </ion-header>
 
     <ion-content>
-
+      <ion-slides pager="true">
+        <ion-slide>
+          <ion-grid class="card">
+            <ion-row>
+              <ion-col class="expDate">
+                {{ user.name }}
+              </ion-col>
+              <ion-col class="card-icon">
+                <ion-icon name="card"/>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col class="card-number">
+                {{ user.name }}
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col class="balance">
+                R {{ user.name }}
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-slide>
+      </ion-slides>
 
 
       <ion-toolbar color="primary">
@@ -309,25 +334,48 @@ export default class SessionList extends Vue {
 }
 </script>
 <style>
-ion-card {
-  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.2);
-  overflow: visible;
-  margin: 16px 0 24px;
-  position: relative;
-  padding-top: 1px;
-  padding-bottom: 10px;
-}
 
 ion-card .img-wrapper {
-  position: absolute;
-  left: 10%;
-  transform: translateX(-50%);
+  position: fixed;
+  transform: translateX(-10%) translateY(5%);
 }
 
 ion-card .img-wrapper img {
   border-radius: 10px;
   width: 80px;
   height: 80px;
+}
+
+ion-slide {
+  padding: 10px 0;
+}
+
+.card {
+  background-color: #1fc8db;
+  background-image: linear-gradient(141deg, #9fb8ad 0%, #1fc8db 51%, #2cb5e8 75%);
+  border-radius: 10px;
+  height: 170px;
+  margin: 0 9px;
+}
+
+ion-row {
+  margin: 10px;
+}
+
+.balance, .expDate, .card-number {
+  text-align: left;
+}
+
+.balance, .card-number {
+  font-size: 20px;
+}
+
+.card-number {
+  font-size: 7vw;
+}
+
+.card-icon {
+  text-align: right;
 }
 
 </style>
