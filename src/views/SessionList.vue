@@ -22,28 +22,76 @@
     </ion-header>
 
     <ion-content>
-      <ion-slides pager="true">
+      <ion-slides>
         <ion-slide>
-          <ion-grid class="card">
+          <ion-card>
+            <ion-card-header class="ion-text-center" :color="'danger'">
+              <h3>Status: <strong>Danger</strong></h3>
+              <p>As for {{ new Date().toLocaleDateString() }},{{ new Date().toLocaleTimeString() }}</p>
+              <ion-item style="--detail-icon-color: black; --detail-icon-font-size:30px; --border-radius : 10px;"
+                        detail="true" lines="none" button color="warning"
+                        @click="goToSpeakerDetail(keeper)">
+                <ion-row>
+                  <ion-col size="12">
+                    <h5 style="color: darkblue" text-wrap>
+                      <strong> Fall Down Detected!</strong>
+                      <br> Immediate Attention Needed!
+                      <br> Click to Contact Care Facility!
+                    </h5>
+                  </ion-col>
+                  <ion-col size="9" style="margin-top: -3%">
+                    <h4 style="color: darkblue" text-wrap>
+                      Today's Caregiver: <strong>{{ keeper.name }}</strong>
+                    </h4>
+                  </ion-col>
+                  <ion-col size="3">
+                    <ion-avatar>
+                      <img v-bind:src="keeper.profilePic" alt="Speaker profile pic">
+                    </ion-avatar>
+                  </ion-col>
+                </ion-row>
+              </ion-item>
+
+            </ion-card-header>
+          </ion-card>
+        </ion-slide>
+        <ion-slide>
+          <ion-card>
+          <ion-card-header :color="'medium'">
+            <h4>In resident room, and not in bed</h4>
+            <ion-note slot="end" color="light">
+              <ion-icon style="margin-top: 0.5%" name="bed" size="medium"></ion-icon>
+            </ion-note>
+
             <ion-row>
-              <ion-col class="expDate">
-                {{ user.name }}
+              <ion-col size="12" size-lg>
+                <ion-item lines="none" color="light" style="--border-radius : 10px;">
+                  <ion-label> Breakfast: 8:00am</ion-label>
+                  <ion-note color="success">
+                    <ion-icon name="checkmark-circle" size="large" style="margin-top:0.5%"></ion-icon>
+                  </ion-note>
+                </ion-item>
               </ion-col>
-              <ion-col class="card-icon">
-                <ion-icon name="card"/>
+
+              <ion-col size="12" size-lg>
+                <ion-item lines="none" color="light" style="--border-radius : 10px;">
+                  <ion-label> Lunch: scheduled @12pm</ion-label>
+                  <ion-note color="warning">
+                    <ion-icon name="help-circle" size="large"></ion-icon>
+                  </ion-note>
+                </ion-item>
+              </ion-col>
+              <ion-col size="12" size-lg>
+                <ion-item lines="none" color="light" style="--border-radius : 10px;">
+                  <ion-label> Dinner: scheduled @6pm</ion-label>
+                  <ion-note color="warning">
+                    <ion-icon name="help-circle" size="large"></ion-icon>
+                  </ion-note>
+                </ion-item>
               </ion-col>
             </ion-row>
-            <ion-row>
-              <ion-col class="card-number">
-                {{ user.name }}
-              </ion-col>
-            </ion-row>
-            <ion-row>
-              <ion-col class="balance">
-                R {{ user.name }}
-              </ion-col>
-            </ion-row>
-          </ion-grid>
+          </ion-card-header>
+          </ion-card>
         </ion-slide>
       </ion-slides>
 
@@ -89,25 +137,6 @@
 
       <ion-list-header v-show="allGrouped.length === 0">No Sessions Found</ion-list-header>
 
-      <ion-fab slot="fixed" vertical="bottom" horizontal="end" ref="fab">
-        <ion-fab-button ref="fabButton">
-          <ion-icon name="share"></ion-icon>
-        </ion-fab-button>
-        <ion-fab-list ref="fabList" side="top">
-          <ion-fab-button color="vimeo" @click="openSocial('Vimeo')">
-            <ion-icon name="logo-vimeo"></ion-icon>
-          </ion-fab-button>
-          <ion-fab-button color="google" @click="openSocial('Google+')">
-            <ion-icon name="logo-googleplus"></ion-icon>
-          </ion-fab-button>
-          <ion-fab-button color="twitter" @click="openSocial('Twitter')">
-            <ion-icon name="logo-twitter"></ion-icon>
-          </ion-fab-button>
-          <ion-fab-button color="facebook" @click="openSocial('Facebook')">
-            <ion-icon name="logo-facebook"></ion-icon>
-          </ion-fab-button>
-        </ion-fab-list>
-      </ion-fab>
     </ion-content>
   </div>
 </template>
@@ -167,7 +196,7 @@ ion-item-sliding[track="navigation"] ion-label {
 <script lang="ts">
 import {Component, Prop, Vue} from "vue-property-decorator";
 import {Session, SessionGroup} from "../store/modules/sessions";
-import {parse as parseDate} from "date-fns";
+import {format, parse, parse as parseDate} from "date-fns";
 import SessionListFilter from "./SessionListFilter.vue";
 
 @Component
@@ -331,6 +360,34 @@ export default class SessionList extends Vue {
   get user() {
     return this.$store.state.speakers.speakers.concat().sort()[0];
   }
+
+  sessionsBySpeaker(speakerId: number) {
+    return this.$store.state.sessions.sessions.filter(
+      (s: Session) => s.speakerIds.indexOf(speakerId) !== -1
+    );
+  }
+
+  get speaker() {
+    console.log(this.$store.state.speakers.speakers.concat().sort());
+    return this.$store.state.speakers.speakers.concat().sort()[0]
+  }
+
+  get keeper() {
+    console.log(this.$store.state.speakers.speakers.concat().sort());
+    return this.$store.state.speakers.speakers.concat().sort()[2]
+  }
+
+  dateFormat(dateString: string, formatString: string) {
+    return format(parse(dateString), formatString);
+  }
+
+  endTime(dateTimeEnd: string) {
+    if (dateTimeEnd != "")
+      return this.dateFormat(dateTimeEnd, "h:mm a")
+    else
+      return ""
+  }
+
 }
 </script>
 <style>

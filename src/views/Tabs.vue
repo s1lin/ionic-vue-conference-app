@@ -15,18 +15,13 @@
 
     <ion-tab-bar slot="bottom">
       <ion-tab-button tab="schedule">
-        <ion-label>Schedule</ion-label>
+        <ion-label>Activities</ion-label>
         <ion-icon name="calendar" />
       </ion-tab-button>
 
       <ion-tab-button tab="speakers">
         <ion-icon name="contacts" />
-        <ion-label>Speakers</ion-label>
-      </ion-tab-button>
-
-      <ion-tab-button tab="map">
-        <ion-icon name="map" />
-        <ion-label>Map</ion-label>
+        <ion-label>Care Givers</ion-label>
       </ion-tab-button>
 
       <ion-tab-button tab="about">
