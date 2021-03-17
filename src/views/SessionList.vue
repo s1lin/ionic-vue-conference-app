@@ -328,11 +328,12 @@
               <ion-row>
                 <ion-col size="12" size-lg>
                   <ion-item lines="none" color="light" style="--border-radius : 10px;">
-                    <ion-label> Breakfast: 8:00am</ion-label>
-                    <ion-note color="success" v-show="status <= 1 || status === 3">
+                    <ion-label v-show="status <= 1 || status === 3 || status > 5"> Breakfast: 8:00am</ion-label>
+                    <ion-label v-show="status === 2 || (status > 3 && status <= 5)"> Breakfast: scheduled@ 8am</ion-label>
+                    <ion-note color="success" v-show="status <= 1 || status === 3 || status > 5">
                       <ion-icon name="checkmark-circle" size="large" style="margin-top:30%"></ion-icon>
                     </ion-note>
-                    <ion-note color="warning" v-show="status === 2">
+                    <ion-note color="warning" v-show="status === 2 || (status > 3 && status <= 5)">
                       <ion-icon name="help-circle" size="large" style="margin-top:30%"></ion-icon>
                     </ion-note>
                   </ion-item>
@@ -340,16 +341,24 @@
 
                 <ion-col size="12" size-lg>
                   <ion-item lines="none" color="light" style="--border-radius : 10px;">
-                    <ion-label> Lunch: scheduled @12pm</ion-label>
-                    <ion-note color="warning">
+                    <ion-label v-show="status <= 5"> Lunch: scheduled @12pm</ion-label>
+                    <ion-label v-show="status > 5"> Lunch: 12:00pm</ion-label>
+                    <ion-note color="success" v-show="status > 5">
+                      <ion-icon name="checkmark-circle" size="large" style="margin-top:30%"></ion-icon>
+                    </ion-note>
+                    <ion-note color="warning" v-show="status <= 5">
                       <ion-icon name="help-circle" size="large" style="margin-top:30%"></ion-icon>
                     </ion-note>
                   </ion-item>
                 </ion-col>
                 <ion-col size="12" size-lg>
                   <ion-item lines="none" color="light" style="--border-radius : 10px;">
-                    <ion-label> Dinner: scheduled @6pm</ion-label>
-                    <ion-note color="warning">
+                    <ion-label v-show="status <= 5"> Dinner: scheduled @6pm</ion-label>
+                    <ion-label v-show="status > 5"> Dinner: 6:00pm</ion-label>
+                    <ion-note color="success" v-show="status > 5">
+                      <ion-icon name="checkmark-circle" size="large" style="margin-top:30%"></ion-icon>
+                    </ion-note>
+                    <ion-note color="warning" v-show="status <= 5">
                       <ion-icon name="help-circle" size="large" style="margin-top:30%"></ion-icon>
                     </ion-note>
                   </ion-item>
@@ -529,10 +538,10 @@ export default class SessionList extends Vue {
         temp = temp.slice(3);
         temp[0].sessions = temp[0].sessions.slice(1);
       } else if (this.status === 6) { //: post lie down
+        temp = temp.slice(5);
+      } else if (this.status === 7) { //: post getup
         temp = temp.slice(4);
         temp[0].sessions = temp[0].sessions.slice(1);
-      } else if (this.status === 7) { //: post getup
-        temp = temp.slice(5);
       }
       return temp;
     } else {
