@@ -1,33 +1,86 @@
 <template>
   <div class="ion-page">
-
-    <ion-header>
-      <ion-card color="light" style="border-radius: 10px; margin: 10px">
-        <ion-row>
-          <ion-col size="3">
-            <div class="img-wrapper">
-              <img :src="user.profilePic" :alt="user.name">
-            </div>
-          </ion-col>
-          <ion-col size="9">
-            <h1 style="margin-top: 10px; margin-bottom: 5px">{{ user.name }}</h1>
-            <ion-icon style="margin-top:0.65%" name="pin" color="medium">
-            </ion-icon>
-            <ion-text color="medium" style="font-size: 16px">
-              {{ user.location }}
-            </ion-text>
-          </ion-col>
-        </ion-row>
-      </ion-card>
-    </ion-header>
-
     <ion-content>
-      <ion-slides>
-        <ion-slide>
+      <ion-refresher slot="fixed" @ionRefresh="doRefresh($event)">
+        <ion-refresher-content
+          pullingIcon="arrow-down"
+          pulling-text="Pull to refresh"
+          refreshingSpinner="bubbles"
+          refreshing-text="Refreshing...">
+        </ion-refresher-content>
+      </ion-refresher>
+      <!--        style="box-shadow: 0 4px 16px #00000059"-->
+      <ion-card color="light" style="overflow: visible; padding-bottom: 10px">
+        <div class="img-wrapper">
+          <img :src="user.profilePic" :alt="user.name">
+          <!--            <ion-button color="light">-->
+          <!--              <ion-icon slot="icon-only" name="camera-outline" color="medium">-->
+          <!--              </ion-icon>-->
+          <!--            </ion-button>-->
+        </div>
+        <ion-card-content class="ion-text-center" style="margin-top: 40px; padding-top: 50px">
+          <h1 style="margin-top: 10px; margin-bottom: 5px; font-weight: 530; color: black">{{ user.name }}</h1>
+          <ion-text color="medium">
+            <div style="margin-top: 0.65%; display: flex;" class="ion-justify-content-center">
+              <ion-icon name="pin" color="medium">
+              </ion-icon>
+              <ion-text color="medium" style="font-size: 13px">
+                {{ user.location }}
+              </ion-text>
+            </div>
+          </ion-text>
+        </ion-card-content>
+      </ion-card>
+      <ion-slides pager="true">
+        <ion-slide v-show='status === 0' style="padding-top: 0">
+        <ion-card>
+          <ion-card-header class="ion-text-center" :color="'success'">
+            <h3>Overall: <strong>Normal</strong></h3>
+            <!--              <p>As for {{ new Date().toLocaleDateString() }},{{ new Date().toLocaleTimeString() }}</p>-->
+            <p>As for 3/16/2021, 9:20:12 AM</p>
+
+            <ion-item lines="none" color="light" style="--border-radius : 10px; margin-bottom: 2%">
+              <ion-label text-wrap>In resident room, and in not bed
+              </ion-label>
+              <ion-note color="danger">
+                <ion-icon name="bed" size="large" style="margin-top:30%"></ion-icon>
+              </ion-note>
+            </ion-item>
+
+            <ion-item style="--detail-icon-color: black; --detail-icon-font-size:30px; --border-radius : 10px;"
+                      detail="true" lines="none" button color="warning"
+                      @click="goToSpeakerDetail(keeper)">
+              <ion-row>
+                <ion-col size="9" style="margin-top: -3%">
+                  <h4 style="color: darkblue" text-wrap>
+                    Today's Caregiver: <strong>{{ keeper.name }}</strong>
+                  </h4>
+                </ion-col>
+                <ion-col size="3">
+                  <ion-avatar>
+                    <img v-bind:src="keeper.profilePic" alt="Speaker profile pic">
+                  </ion-avatar>
+                </ion-col>
+              </ion-row>
+            </ion-item>
+
+          </ion-card-header>
+        </ion-card>
+      </ion-slide>
+        <ion-slide v-show='status === 1' style="padding-top: 0">
           <ion-card>
             <ion-card-header class="ion-text-center" :color="'danger'">
-              <h3>Status: <strong>Danger</strong></h3>
-              <p>As for {{ new Date().toLocaleDateString() }},{{ new Date().toLocaleTimeString() }}</p>
+              <h3>Overall: <strong>Danger</strong></h3>
+              <p>As for 3/16/2021, 9:20:13 AM</p>
+
+              <ion-item lines="none" color="light" style="--border-radius : 10px; margin-bottom: 2%">
+                <ion-label text-wrap>In resident room, and not in bed
+                </ion-label>
+                <ion-note color="danger">
+                  <ion-icon name="bed" size="large" style="margin-top:30%"></ion-icon>
+                </ion-note>
+              </ion-item>
+
               <ion-item style="--detail-icon-color: black; --detail-icon-font-size:30px; --border-radius : 10px;"
                         detail="true" lines="none" button color="warning"
                         @click="goToSpeakerDetail(keeper)">
@@ -55,48 +108,118 @@
             </ion-card-header>
           </ion-card>
         </ion-slide>
-        <ion-slide>
+        <ion-slide v-show='status === 2' style="padding-top: 0">
           <ion-card>
-          <ion-card-header :color="'medium'">
-            <h4>In resident room, and not in bed</h4>
-            <ion-note slot="end" color="light">
-              <ion-icon style="margin-top: 0.5%" name="bed" size="medium"></ion-icon>
-            </ion-note>
+            <ion-card-header class="ion-text-center" :color="'success'">
+              <h3>Overall: <strong>Normal</strong></h3>
+              <!--              <p>As for {{ new Date().toLocaleDateString() }},{{ new Date().toLocaleTimeString() }}</p>-->
+              <p>As for 3/16/2021, 08:00:00 AM</p>
 
-            <ion-row>
-              <ion-col size="12" size-lg>
-                <ion-item lines="none" color="light" style="--border-radius : 10px;">
-                  <ion-label> Breakfast: 8:00am</ion-label>
-                  <ion-note color="success">
-                    <ion-icon name="checkmark-circle" size="large" style="margin-top:0.5%"></ion-icon>
-                  </ion-note>
-                </ion-item>
-              </ion-col>
+              <ion-item lines="none" color="light" style="--border-radius : 10px; margin-bottom: 2%">
+                <ion-label text-wrap>In resident room, and in not bed
+                </ion-label>
+                <ion-note color="danger">
+                  <ion-icon name="bed" size="large" style="margin-top:30%"></ion-icon>
+                </ion-note>
+              </ion-item>
 
-              <ion-col size="12" size-lg>
-                <ion-item lines="none" color="light" style="--border-radius : 10px;">
-                  <ion-label> Lunch: scheduled @12pm</ion-label>
-                  <ion-note color="warning">
-                    <ion-icon name="help-circle" size="large"></ion-icon>
-                  </ion-note>
-                </ion-item>
-              </ion-col>
-              <ion-col size="12" size-lg>
-                <ion-item lines="none" color="light" style="--border-radius : 10px;">
-                  <ion-label> Dinner: scheduled @6pm</ion-label>
-                  <ion-note color="warning">
-                    <ion-icon name="help-circle" size="large"></ion-icon>
-                  </ion-note>
-                </ion-item>
-              </ion-col>
-            </ion-row>
-          </ion-card-header>
+              <ion-item style="--detail-icon-color: black; --detail-icon-font-size:30px; --border-radius : 10px;"
+                        detail="true" lines="none" button color="warning"
+                        @click="goToSpeakerDetail(keeper)">
+                <ion-row>
+                  <ion-col size="9" style="margin-top: -3%">
+                    <h4 style="color: darkblue" text-wrap>
+                      Today's Caregiver: <strong>{{ keeper.name }}</strong>
+                    </h4>
+                  </ion-col>
+                  <ion-col size="3">
+                    <ion-avatar>
+                      <img v-bind:src="keeper.profilePic" alt="Speaker profile pic">
+                    </ion-avatar>
+                  </ion-col>
+                </ion-row>
+              </ion-item>
+
+            </ion-card-header>
+          </ion-card>
+        </ion-slide>
+        <ion-slide v-show='status === 3' style="padding-top: 0">
+          <ion-card>
+            <ion-card-header class="ion-text-center" :color="'success'">
+              <h3>Overall: <strong>Normal</strong></h3>
+              <!--              <p>As for {{ new Date().toLocaleDateString() }},{{ new Date().toLocaleTimeString() }}</p>-->
+              <p>As for 3/15/2021, 11:20:12 PM</p>
+
+              <ion-item lines="none" color="light" style="--border-radius : 10px; margin-bottom: 2%">
+                <ion-label text-wrap>In resident room, and in bed
+                </ion-label>
+                <ion-note color="success">
+                  <ion-icon name="bed" size="large" style="margin-top:30%"></ion-icon>
+                </ion-note>
+              </ion-item>
+
+              <ion-item style="--detail-icon-color: black; --detail-icon-font-size:30px; --border-radius : 10px;"
+                        detail="true" lines="none" button color="warning"
+                        @click="goToSpeakerDetail(keeper2)">
+                <ion-row>
+                  <ion-col size="9" style="margin-top: -3%">
+                    <h4 style="color: darkblue" text-wrap>
+                      Today's Caregiver: <strong>{{ keeper2.name }}</strong>
+                    </h4>
+                  </ion-col>
+                  <ion-col size="3">
+                    <ion-avatar>
+                      <img v-bind:src="keeper2.profilePic" alt="Speaker profile pic">
+                    </ion-avatar>
+                  </ion-col>
+                </ion-row>
+              </ion-item>
+
+            </ion-card-header>
+          </ion-card>
+        </ion-slide>
+        <ion-slide style="padding-top: 0">
+          <ion-card>
+            <ion-card-header :color="'primary'">
+              <h3>Food Card: <strong>Normal</strong></h3>
+              <p v-show="status === 2">As for 3/16/2021, 07:59:59 AM</p>
+              <p v-show="status === 3">As for 3/16/2021, 08:00:00 AM</p>
+              <p v-show="status <= 1 || status > 3">As for {{ new Date().toLocaleDateString() }},{{ new Date().toLocaleTimeString() }}</p>
+              <ion-row>
+                <ion-col size="12" size-lg>
+                  <ion-item lines="none" color="light" style="--border-radius : 10px;">
+                    <ion-label> Breakfast: 8:00am</ion-label>
+                    <ion-note color="success" v-show="status <= 1">
+                      <ion-icon name="checkmark-circle" size="large" style="margin-top:30%"></ion-icon>
+                    </ion-note>
+                    <ion-note color="warning" v-show="status > 1 && status <= 3">
+                      <ion-icon name="help-circle" size="large" style="margin-top:30%"></ion-icon>
+                    </ion-note>
+                  </ion-item>
+                </ion-col>
+
+                <ion-col size="12" size-lg>
+                  <ion-item lines="none" color="light" style="--border-radius : 10px;">
+                    <ion-label> Lunch: scheduled @12pm</ion-label>
+                    <ion-note color="warning">
+                      <ion-icon name="help-circle" size="large" style="margin-top:30%"></ion-icon>
+                    </ion-note>
+                  </ion-item>
+                </ion-col>
+                <ion-col size="12" size-lg>
+                  <ion-item lines="none" color="light" style="--border-radius : 10px;">
+                    <ion-label> Dinner: scheduled @6pm</ion-label>
+                    <ion-note color="warning">
+                      <ion-icon name="help-circle" size="large" style="margin-top:30%"></ion-icon>
+                    </ion-note>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+            </ion-card-header>
           </ion-card>
         </ion-slide>
       </ion-slides>
-
-
-      <ion-toolbar color="primary">
+      <ion-toolbar color="light">
         <ion-searchbar v-model="queryText" @ionChange="updateSearchTerm" placeholder="Search"></ion-searchbar>
       </ion-toolbar>
       <ion-list v-show="allGrouped.length > 0">
@@ -110,11 +233,13 @@
             :key="session.id"
             :track="session.tracks[0] | lowercase"
           >
-            <ion-item button @click="goToSessionDetail(session)">
+            <ion-item button
+                      @click="goToSessionDetail(session)"
+                      :class="{'ion-color':session.tracks[0]==='design', 'ion-color-danger':session.tracks[0]==='design'}">
               <ion-label>
                 <h3>{{ session.name }}</h3>
                 <p>{{ session.dateTimeStart | dateFormat("h:mm a") }} &mdash;
-                  {{ session.dateTimeEnd | dateFormat("h:mm a") }}: {{ session.location }}</p>
+                  {{ endTime(session.dateTimeEnd) }}: {{ session.location }}</p>
               </ion-label>
             </ion-item>
             <ion-item-options>
@@ -122,7 +247,7 @@
                 color="favorite"
                 @click="addFavorite($event, session)"
                 v-if="segment === 'all'"
-              >Favorite
+              >Save
               </ion-item-option>
               <ion-item-option
                 color="danger"
@@ -134,61 +259,61 @@
           </ion-item-sliding>
         </ion-item-group>
       </ion-list>
-
       <ion-list-header v-show="allGrouped.length === 0">No Sessions Found</ion-list-header>
 
     </ion-content>
+
   </div>
 </template>
 
 <style scoped>
 ion-item-sliding[track="ionic"] ion-label {
-  border-left: 2px solid var(--ion-color-primary);
+  border-left: 5px solid var(--ion-color-primary);
   padding-left: 10px;
 }
 
 ion-item-sliding[track="angular"] ion-label {
-  border-left: 2px solid var(--ion-color-angular);
+  border-left: 5px solid var(--ion-color-angular);
   padding-left: 10px;
 }
 
 ion-item-sliding[track="communication"] ion-label {
-  border-left: 2px solid var(--ion-color-communication);
+  border-left: 5px solid var(--ion-color-communication);
   padding-left: 10px;
 }
 
 ion-item-sliding[track="tooling"] ion-label {
-  border-left: 2px solid var(--ion-color-tooling);
+  border-left: 5px solid var(--ion-color-tooling);
   padding-left: 10px;
 }
 
 ion-item-sliding[track="services"] ion-label {
-  border-left: 2px solid var(--ion-color-services);
+  border-left: 5px solid var(--ion-color-services);
   padding-left: 10px;
 }
 
 ion-item-sliding[track="design"] ion-label {
-  border-left: 2px solid var(--ion-color-design);
+  border-left: 5px solid var(--ion-color-design);
   padding-left: 10px;
 }
 
 ion-item-sliding[track="workshop"] ion-label {
-  border-left: 2px solid var(--ion-color-workshop);
+  border-left: 5px solid var(--ion-color-workshop);
   padding-left: 10px;
 }
 
 ion-item-sliding[track="food"] ion-label {
-  border-left: 2px solid var(--ion-color-food);
+  border-left: 5px solid var(--ion-color-food);
   padding-left: 10px;
 }
 
 ion-item-sliding[track="documentation"] ion-label {
-  border-left: 2px solid var(--ion-color-documentation);
+  border-left: 5px solid var(--ion-color-documentation);
   padding-left: 10px;
 }
 
 ion-item-sliding[track="navigation"] ion-label {
-  border-left: 2px solid var(--ion-color-navigation);
+  border-left: 5px solid var(--ion-color-navigation);
   padding-left: 10px;
 }
 </style>
@@ -199,19 +324,29 @@ import {Session, SessionGroup} from "../store/modules/sessions";
 import {format, parse, parse as parseDate} from "date-fns";
 import SessionListFilter from "./SessionListFilter.vue";
 
+
 @Component
 export default class SessionList extends Vue {
   $refs!: {
     fab: HTMLIonFabElement;
   };
   segment = "all";
+  status = 0;
+  counter = 0;
+
+  doRefresh(event: CustomEvent) {
+    console.log('Begin async operation', event);
+    event.detail.complete();
+    this.counter++;
+    this.status = this.counter % 4;
+  }
 
   groupedByStartTime(sessions: Session[]) {
     return sessions
       .sort(
         (a, b) =>
-          parseDate(a.dateTimeStart).valueOf() -
-          parseDate(b.dateTimeStart).valueOf()
+          parseDate(b.dateTimeEnd).valueOf() -
+          parseDate(a.dateTimeEnd).valueOf()
       )
       .reduce(
         (groups, session) => {
@@ -239,7 +374,12 @@ export default class SessionList extends Vue {
 
   get allGrouped() {
     if (this.segment === "all") {
-      return this.groupedByStartTime(this.$store.getters.allFiltered);
+      var temp = this.groupedByStartTime(this.$store.getters.allFiltered);
+      if(this.status === 0)
+        temp = temp.slice(1);
+      else if (this.status === 2)
+        temp = temp.slice(3);
+      return temp;
     } else {
       return this.groupedByStartTime(this.$store.getters.favoritesFiltered);
     }
@@ -377,6 +517,11 @@ export default class SessionList extends Vue {
     return this.$store.state.speakers.speakers.concat().sort()[2]
   }
 
+  get keeper2() {
+    console.log(this.$store.state.speakers.speakers.concat().sort());
+    return this.$store.state.speakers.speakers.concat().sort()[3]
+  }
+
   dateFormat(dateString: string, formatString: string) {
     return format(parse(dateString), formatString);
   }
@@ -392,9 +537,35 @@ export default class SessionList extends Vue {
 </script>
 <style>
 
+/*ion-card .img-wrapper {*/
+/*  position: fixed;*/
+/*  !*transform: translateX(-10%) translateY(5%);*!*/
+/*}*/
+
+/*ion-card .img-wrapper img {*/
+/*  border-radius: 10px;*/
+/*  width: 80px;*/
+/*  height: 80px;*/
+/*  margin-top: 10%;*/
+/*}*/
+
+/*ion-slide {*/
+/*  padding: 10px 0;*/
+/*}*/
+
+/*ion-card {*/
+/*  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.2);*/
+/*  overflow: visible;*/
+/*  margin: 16px 0 24px;*/
+/*  position: relative;*/
+/*  padding-top: 60px;*/
+/*}*/
+
 ion-card .img-wrapper {
-  position: fixed;
-  transform: translateX(-10%) translateY(5%);
+  position: absolute;
+  left: 50%;
+  top: -30px;
+  transform: translateX(-50%);
 }
 
 ion-card .img-wrapper img {
@@ -403,36 +574,31 @@ ion-card .img-wrapper img {
   height: 80px;
 }
 
-ion-slide {
-  padding: 10px 0;
+ion-card .img-wrapper ion-button {
+  --border-width: 1px;
+  --border-color: var(--ion-color-light-shade);
+  --border-style: solid;
+  --padding-start: 0;
+  --padding-end: 0;
+  --padding-bottom: 0;
+  --padding-top: 0;
+
+  --border-radius: 50%;
+  height: 26px;
+  width: 26px;
+
+  position: absolute;
+  right: -10px;
+  bottom: -10px;
 }
 
-.card {
-  background-color: #1fc8db;
-  background-image: linear-gradient(141deg, #9fb8ad 0%, #1fc8db 51%, #2cb5e8 75%);
-  border-radius: 10px;
-  height: 170px;
-  margin: 0 9px;
+ion-card .img-wrapper ion-button ion-icon {
+  width: 14px;
+  height: 14px;
 }
 
-ion-row {
-  margin: 10px;
-}
-
-.balance, .expDate, .card-number {
-  text-align: left;
-}
-
-.balance, .card-number {
-  font-size: 20px;
-}
-
-.card-number {
-  font-size: 7vw;
-}
-
-.card-icon {
-  text-align: right;
+.swiper-container-horizontal > .swiper-pagination-bullets, .swiper-pagination-custom, .swiper-pagination-fraction {
+  bottom: 0;
 }
 
 </style>

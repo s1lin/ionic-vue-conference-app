@@ -2,5 +2,6 @@
   "appId": "com.trustcare.io",
   "appName": "trustcare",
   "bundledWebRuntime": false,
-  "webDir": "dist"
+  "webDir": "dist",
+  "npmClient": "npm"
 }
