@@ -40,7 +40,7 @@
             <p>As for 3/16/2021, 9:20:12 AM</p>
 
             <ion-item lines="none" color="light" style="--border-radius : 10px; margin-bottom: 2%">
-              <ion-label text-wrap>In resident room, and in not bed
+              <ion-label text-wrap>In resident room, and not in bed
               </ion-label>
               <ion-note color="danger">
                 <ion-icon name="bed" size="large" style="margin-top:30%"></ion-icon>
@@ -71,7 +71,7 @@
           <ion-card>
             <ion-card-header class="ion-text-center" :color="'danger'">
               <h3>Overall: <strong>Danger</strong></h3>
-              <p>As for 3/16/2021, 9:20:13 AM</p>
+              <p>As for 3/16/2021, 09:20:14 AM</p>
 
               <ion-item lines="none" color="light" style="--border-radius : 10px; margin-bottom: 2%">
                 <ion-label text-wrap>In resident room, and not in bed
@@ -116,7 +116,7 @@
               <p>As for 3/16/2021, 08:00:00 AM</p>
 
               <ion-item lines="none" color="light" style="--border-radius : 10px; margin-bottom: 2%">
-                <ion-label text-wrap>In resident room, and in not bed
+                <ion-label text-wrap>In resident room, and not in bed
                 </ion-label>
                 <ion-note color="danger">
                   <ion-icon name="bed" size="large" style="margin-top:30%"></ion-icon>
@@ -151,7 +151,7 @@
               <p>As for 3/16/2021, 08:00:12AM</p>
 
               <ion-item lines="none" color="light" style="--border-radius : 10px; margin-bottom: 2%">
-                <ion-label text-wrap>In resident room, and in not bed
+                <ion-label text-wrap>In resident room, and not in bed
                 </ion-label>
                 <ion-note color="danger">
                   <ion-icon name="bed" size="large" style="margin-top:30%"></ion-icon>
@@ -183,7 +183,7 @@
             <ion-card-header class="ion-text-center" :color="'success'">
               <h3>Overall: <strong>Normal</strong></h3>
               <!--              <p>As for {{ new Date().toLocaleDateString() }},{{ new Date().toLocaleTimeString() }}</p>-->
-              <p>As for 3/16/2021, 07:29:10 AM</p>
+              <p>As for 3/16/2021, 07:29:59 AM</p>
 
               <ion-item lines="none" color="light" style="--border-radius : 10px; margin-bottom: 2%">
                 <ion-label text-wrap>In resident room, and in bed
@@ -221,7 +221,7 @@
             <p>As for 3/16/2021, 07:30:00 AM</p>
 
             <ion-item lines="none" color="light" style="--border-radius : 10px; margin-bottom: 2%">
-              <ion-label text-wrap>In resident room, and in not bed
+              <ion-label text-wrap>In resident room, and not in bed
               </ion-label>
               <ion-note color="danger">
                 <ion-icon name="bed" size="large" style="margin-top:30%"></ion-icon>
@@ -256,9 +256,9 @@
               <p>As for 3/15/2021, 11:20:12 PM</p>
 
               <ion-item lines="none" color="light" style="--border-radius : 10px; margin-bottom: 2%">
-                <ion-label text-wrap>In resident room, and in bed
+                <ion-label text-wrap>In resident room, and not in bed
                 </ion-label>
-                <ion-note color="success">
+                <ion-note color="danger">
                   <ion-icon name="bed" size="large" style="margin-top:30%"></ion-icon>
                 </ion-note>
               </ion-item>
@@ -288,12 +288,12 @@
             <ion-card-header class="ion-text-center" :color="'success'">
               <h3>Overall: <strong>Normal</strong></h3>
               <!--              <p>As for {{ new Date().toLocaleDateString() }},{{ new Date().toLocaleTimeString() }}</p>-->
-              <p>As for 3/15/2021, 11:20:12 PM</p>
+              <p>As for 3/15/2021, 11:20:50 PM</p>
 
               <ion-item lines="none" color="light" style="--border-radius : 10px; margin-bottom: 2%">
-                <ion-label text-wrap>In resident room, and not in bed
+                <ion-label text-wrap>In resident room, and in bed
                 </ion-label>
-                <ion-note color="danger">
+                <ion-note color="success">
                   <ion-icon name="bed" size="large" style="margin-top:30%"></ion-icon>
                 </ion-note>
               </ion-item>
@@ -322,9 +322,14 @@
           <ion-card>
             <ion-card-header :color="'primary'">
               <h3>Food Card: <strong>Normal</strong></h3>
-              <p v-show="status === 2">As for 3/16/2021, 07:59:59 AM</p>
-              <p v-show="status === 3">As for 3/16/2021, 08:00:00 AM</p>
-              <p v-show="status <= 1 || status > 3">As for {{ new Date().toLocaleDateString() }},{{ new Date().toLocaleTimeString() }}</p>
+              <p v-show="status === 0">As for 3/16/2021, 09:20:14 AM</p>
+              <p v-show="status === 1">As for 3/16/2021, 09:20:13 AM</p>
+              <p v-show="status === 2">As for 3/16/2021, 08:00:00 AM</p>
+              <p v-show="status === 3">As for 3/16/2021, 08:00:12 AM</p>
+              <p v-show="status === 4">As for 3/16/2021, 07:29:59 AM</p>
+              <p v-show="status === 5">As for 3/16/2021, 07:30:00 AM</p>
+              <p v-show="status === 6">As for 3/15/2021, 11:20:12 PM</p>
+              <p v-show="status === 7">As for 3/15/2021, 11:20:50 PM</p>
               <ion-row>
                 <ion-col size="12" size-lg>
                   <ion-item lines="none" color="light" style="--border-radius : 10px;">
@@ -482,7 +487,7 @@ export default class SessionList extends Vue {
   segment = "all";
   status = 0;
   counter = 0;
-
+  date=new Date().toLocaleDateString();
   doRefresh(event: CustomEvent) {
     console.log('Begin async operation', event);
     event.detail.complete();

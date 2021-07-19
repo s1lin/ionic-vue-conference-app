@@ -90,7 +90,7 @@
     "dateTimeEnd": "2047-05-16T23:20",
     "name": "Lie Down on Bed",
     "location": "Patient's Room",
-    "description": "Patient lies down onto the bed",
+    "description": "Patient has lied down onto the bed",
     "speakerIds": [
       2
     ],
@@ -101,7 +101,7 @@
   {
     "id": 8,
     "dateTimeStart": "2047-05-16T20:20",
-    "dateTimeEnd": "2047-05-16T23:00",
+    "dateTimeEnd": "2047-05-16T23:20",
     "name": "Normal Activities",
     "location": "Patient's Room",
     "description": "Normal Activities",
